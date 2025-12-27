@@ -98,19 +98,12 @@ digraph DebateDAG {
 
 def save_dag_files(output_dir: str = "."):
     """
-    Generate and save the DAG diagram as PNG and SVG.
+    Generate and save the DAG diagram as a Mermaid markdown file.
     
     Args:
         output_dir: Directory to save the output files
     """
-    # Always save DOT file first
-    dot_content = create_dag_diagram()
-    dot_path = Path(output_dir) / "dag.dot"
-    with open(dot_path, 'w') as f:
-        f.write(dot_content)
-    print(f"DOT source saved to: {dot_path}")
-    
-    # Also create a Mermaid diagram as fallback
+    # Create a Mermaid diagram
     mermaid_content = """```mermaid
 flowchart TD
     START([START]) --> UI[UserInputNode<br/>Topic Validation]
@@ -135,32 +128,6 @@ flowchart TD
         f.write("# Multi-Agent Debate DAG Diagram\n\n")
         f.write(mermaid_content)
     print(f"Mermaid diagram saved to: {mermaid_path}")
-    
-    if not HAS_GRAPHVIZ:
-        print("\nNote: graphviz Python package not installed.")
-        print("Install with: pip install graphviz")
-        print("You can render the DOT file manually or use the Mermaid diagram.")
-        return
-    
-    try:
-        # Create Graph object
-        graph = graphviz.Source(dot_content)
-        
-        # Save as PNG
-        png_path = Path(output_dir) / "dag"
-        graph.render(png_path, format='png', cleanup=True)
-        print(f"PNG saved to: {png_path}.png")
-        
-        # Save as SVG
-        svg_path = Path(output_dir) / "dag"
-        graph.render(svg_path, format='svg', cleanup=True)
-        print(f"SVG saved to: {svg_path}.svg")
-        
-    except Exception as e:
-        print(f"\nCould not render PNG/SVG: {e}")
-        print("The Graphviz 'dot' executable may not be installed.")
-        print("Install Graphviz from: https://graphviz.org/download/")
-        print("Or use the Mermaid diagram in dag.md")
 
 
 

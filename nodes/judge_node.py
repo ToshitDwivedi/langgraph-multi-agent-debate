@@ -11,51 +11,26 @@ from typing import Dict, Any
 from datetime import datetime
 
 try:
-    from langchain_openai import ChatOpenAI
-except ImportError:
-    ChatOpenAI = None
-
-try:
-    from langchain_google_genai import ChatGoogleGenerativeAI
-except ImportError:
-    ChatGoogleGenerativeAI = None
-
-try:
     from langchain_groq import ChatGroq
 except ImportError:
     ChatGroq = None
+    raise ImportError("langchain-groq not installed")
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
 
 def get_llm(config: dict):
-    """Initialize the LLM based on configuration."""
+    """Initialize Groq LLM based on configuration."""
     llm_config = config.get("llm", {})
-    provider = llm_config.get("provider", "groq")
     model = llm_config.get("model", "llama-3.3-70b-versatile")
     temperature = 0.3  # Lower temperature for more consistent judging
     max_tokens = 1000
     
-    if provider == "groq" and ChatGroq:
-        return ChatGroq(
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-    elif provider == "openai" and ChatOpenAI:
-        return ChatOpenAI(
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-    elif provider == "google" and ChatGoogleGenerativeAI:
-        return ChatGoogleGenerativeAI(
-            model=model,
-            temperature=temperature,
-            max_output_tokens=max_tokens,
-        )
-    else:
-        raise ValueError(f"Unsupported LLM provider: {provider}. Available: groq, openai, google")
+    return ChatGroq(
+        model=model,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
 
 
 def format_transcript(turns: list, topic: str) -> str:

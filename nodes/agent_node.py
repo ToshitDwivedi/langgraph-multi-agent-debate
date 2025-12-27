@@ -14,22 +14,12 @@ import random
 from typing import Dict, Any, Optional
 from datetime import datetime
 from pathlib import Path
-
-# LLM imports - supporting multiple providers
-try:
-    from langchain_openai import ChatOpenAI
-except ImportError:
-    ChatOpenAI = None
-
-try:
-    from langchain_google_genai import ChatGoogleGenerativeAI
-except ImportError:
-    ChatGoogleGenerativeAI = None
-
+# LLM imports - only Groq supported
 try:
     from langchain_groq import ChatGroq
 except ImportError:
     ChatGroq = None
+    raise ImportError("langchain-groq not installed. Please install it.")
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -45,17 +35,17 @@ def load_persona(persona_file: str, base_path: str = ".") -> str:
 
 def get_llm(config: dict, seed: Optional[int] = None):
     """
-    Initialize the LLM based on configuration.
+    Initialize Groq LLM based on configuration.
     
     Args:
         config: Configuration dict with LLM settings
         seed: Optional random seed for reproducibility
         
     Returns:
-        LLM instance
+        ChatGroq instance
     """
     llm_config = config.get("llm", {})
-    provider = llm_config.get("provider", "groq")
+    # Default to compatible Llama model on Groq
     model = llm_config.get("model", "llama-3.3-70b-versatile")
     temperature = llm_config.get("temperature", 0.7)
     max_tokens = llm_config.get("max_tokens", 500)
@@ -65,26 +55,11 @@ def get_llm(config: dict, seed: Optional[int] = None):
         # Reduce temperature for more deterministic output
         temperature = min(temperature, 0.3)
     
-    if provider == "groq" and ChatGroq:
-        return ChatGroq(
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-    elif provider == "openai" and ChatOpenAI:
-        return ChatOpenAI(
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-    elif provider == "google" and ChatGoogleGenerativeAI:
-        return ChatGoogleGenerativeAI(
-            model=model,
-            temperature=temperature,
-            max_output_tokens=max_tokens,
-        )
-    else:
-        raise ValueError(f"Unsupported LLM provider: {provider}. Available: groq, openai, google")
+    return ChatGroq(
+        model=model,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
 
 
 def format_memory_for_agent(state: Dict[str, Any], agent_id: str) -> str:

@@ -1,5 +1,7 @@
 # Multi-Agent Debate System (LangGraph)
 
+![Status: Complete](https://img.shields.io/badge/Status-Complete-green)
+
 An autonomous, structured debate platform where two AI agents (Scientist & Philosopher) engage in a rigorous dialectic, managed by a state-aware control system and evaluated by an impartial AI judge.
 
 This project implements a **Cyclic Directed Acyclic Graph (DAG)** using **LangGraph** to enforce strict debate rules, turn alternation, and argument coherence.

@@ -16,11 +16,11 @@ settings:
   topic_drift_threshold: 0.3  # Minimum keyword overlap to stay on topic
 
 llm:
-  provider: "groq"  # Options: "groq", "openai", "google"
-  model: "llama-3.3-70b-versatile"  # Groq model (fast and free!)
+  # Using Groq (Llama 8B/70B)
+  model: "llama-3.3-70b-versatile"
   temperature: 0.7
   max_tokens: 500
 
 logging:
-  format: "json"  # Options: "json", "text"
+  format: "json"
   log_dir: "logs"
