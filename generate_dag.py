@@ -164,31 +164,6 @@ flowchart TD
 
 
 
-def generate_langgraph_diagram():
-    """
-    Alternative: Use LangGraph's built-in visualization if available.
-    """
-    try:
-        from run_debate import build_debate_graph
-        
-        graph = build_debate_graph()
-        
-        # Try to get the graph visualization
-        if hasattr(graph, 'get_graph'):
-            mermaid_graph = graph.get_graph().draw_mermaid()
-            
-            mermaid_path = Path(".") / "dag_langgraph.md"
-            with open(mermaid_path, 'w') as f:
-                f.write("```mermaid\n")
-                f.write(mermaid_graph)
-                f.write("\n```")
-            print(f"LangGraph Mermaid diagram saved to: {mermaid_path}")
-            return True
-    except Exception as e:
-        print(f"Could not generate LangGraph diagram: {e}")
-        return False
-
-
 def main():
     """Main entry point."""
     print("Generating DAG visualization...")
@@ -198,11 +173,6 @@ def main():
     save_dag_files(".")
     
     print("-" * 40)
-    
-    # Try LangGraph's built-in visualization
-    print("\nAttempting LangGraph native visualization...")
-    generate_langgraph_diagram()
-    
     print("\nDone!")
 
 
