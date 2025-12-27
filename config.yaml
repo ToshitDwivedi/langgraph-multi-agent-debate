@@ -1,0 +1,26 @@
+# Multi-Agent Debate Configuration
+
+personas:
+  agent_a:
+    name: "Scientist"
+    prompt_file: "persona_templates/scientist.txt"
+  agent_b:
+    name: "Philosopher"
+    prompt_file: "persona_templates/philosopher.txt"
+
+settings:
+  total_rounds: 8
+  min_topic_length: 10
+  max_topic_length: 500
+  similarity_threshold: 0.85  # For duplicate argument detection
+  topic_drift_threshold: 0.3  # Minimum keyword overlap to stay on topic
+
+llm:
+  provider: "groq"  # Options: "groq", "openai", "google"
+  model: "llama-3.3-70b-versatile"  # Groq model (fast and free!)
+  temperature: 0.7
+  max_tokens: 500
+
+logging:
+  format: "json"  # Options: "json", "text"
+  log_dir: "logs"
