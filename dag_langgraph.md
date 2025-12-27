@@ -23,8 +23,8 @@ graph TD;
 	memory --> logger;
 	user_input --> agent;
 	final_logger --> __end__;
-	classDef default fill:#f2f0ff,line-height:1.2
+	classDef default fill:#181819,line-height:1.2
 	classDef first fill-opacity:0
-	classDef last fill:#bfb6fc
+	classDef last fill:#000000
 
 ```
