@@ -202,8 +202,20 @@ def agent_node(state: Dict[str, Any]) -> Dict[str, Any]:
     
     # Generate argument
     llm = get_llm(config, seed)
-    response = llm.invoke(messages)
-    argument = response.content.strip()
+    try:
+        response = llm.invoke(messages)
+        argument = response.content.strip()
+    except Exception as e:
+        error_msg = str(e)
+        if "Connection error" in error_msg or "getaddrinfo failed" in error_msg:
+            raise ConnectionError(
+                "Cannot connect to Groq API. Please check:\n"
+                "1. Your internet connection\n"
+                "2. If api.groq.com is accessible from your network\n"
+                "3. If your firewall/proxy is blocking the connection\n"
+                "4. Try using a VPN or different network"
+            )
+        raise
     
     # Create log entry
     log_entry = {
